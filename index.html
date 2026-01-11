@@ -151,14 +151,17 @@ nav {
 .hero::before {
     content: '';
     position: absolute;
-    top: 0; left: -100%;
-    width: 200%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+    inset: 0;
+    width: 200%;
+    background: linear-gradient(90deg, transparent, rgba(0,255,65,0.15), transparent);
     animation: scan 8s linear infinite;
-    pointer-events: none;
 }
 
-@keyframes scan { 0% { left: -100%; } 100% { left: 100%; } }
+@keyframes scan {
+    0%   { transform: translateX(-50%); }
+    100% { transform: translateX(50%); }
+}
+
 
 /* Typewriter */
 .typewriter {
