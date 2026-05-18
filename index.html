@@ -22,15 +22,15 @@
     <style>
  
 :root {
-    --color-primary: #00ff41;
-    --color-primary-hover: #39ff14;
-    --color-secondary: #9100ff;
-    --color-tertiary: #00d9ff;
+    --color-primary: #ff2e2e;
+    --color-primary-hover: #ff5757;
+    --color-secondary: #ffb300;
+    --color-tertiary: #ffd633;
     --color-text: #e0e0e0;
     --color-text-light: #a0a0a0;
     --color-bg: #0a0e27;
-    --color-surface: #1a1f3a;
-    --color-border: #00ff41;
+    --color-surface: #1f1212;
+    --color-border: #ff2e2e;
     --font-family: 'Courier New', monospace, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -42,9 +42,9 @@ body {
     font-family: var(--font-family);
     background-color: var(--color-bg);
     background-image: 
-        repeating-linear-gradient(0deg, rgba(0, 255, 65, 0.03) 0px, rgba(0, 255, 65, 0.03) 1px, transparent 1px, transparent 2px),
-        radial-gradient(ellipse at 20% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(255, 0, 110, 0.1) 0%, transparent 50%);
+        repeating-linear-gradient(0deg, rgba(255, 46, 46, 0.03) 0px, rgba(255, 46, 46, 0.03) 1px, transparent 1px, transparent 2px),
+        radial-gradient(ellipse at 20% 50%, rgba(255, 214, 51, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(255, 179, 0, 0.1) 0%, transparent 50%);
     color: var(--color-text);
     line-height: 1.6;
     overflow-x: hidden;
@@ -57,7 +57,7 @@ nav {
     width: 100%;
     background: rgba(10, 14, 39, 0.95);
     backdrop-filter: blur(10px);
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2), 0 2px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(0, 255, 65, 0.1);
+    box-shadow: 0 0 20px rgba(255, 46, 46, 0.2), 0 2px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 46, 46, 0.1);
     border-bottom: 1px solid var(--color-primary);
     z-index: 1000;
     padding: 1rem 2rem;
@@ -78,7 +78,7 @@ nav {
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 3px;
-    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    text-shadow: 0 0 10px rgba(255, 46, 46, 0.5);
 }
 
 .nav-links {
@@ -133,7 +133,7 @@ nav {
 .hero {
     margin-top: 60px;
     padding: 6rem 2rem;
-    background: linear-gradient( 90deg, transparent 0%, rgba(0,255,65,0.1) 25%, transparent 50%, rgba(0,255,65,0.1) 75%, transparent 100% );
+    background: linear-gradient( 90deg, transparent 0%, rgba(255,46,46,0.1) 25%, transparent 50%, rgba(255,46,46,0.1) 75%, transparent 100% );
     color: var(--color-primary);
     text-align: center;
     min-height: 50vh;
@@ -145,7 +145,7 @@ nav {
     position: relative;
     overflow: hidden;
     border-bottom: 2px solid var(--color-primary);
-    box-shadow: 0 0 40px rgba(0, 255, 65, 0.2), inset 0 0 80px rgba(0, 217, 255, 0.1);
+    box-shadow: 0 0 40px rgba(255, 46, 46, 0.2), inset 0 0 80px rgba(255, 214, 51, 0.1);
 }
 
 .hero::before {
@@ -158,7 +158,7 @@ nav {
         90deg,
         transparent 0%,
         transparent 40%,
-        rgba(0,255,65,0.15) 50%,
+        rgba(255,46,46,0.15) 50%,
         transparent 60%
     );
 
@@ -212,7 +212,7 @@ nav {
 .cta-button {
     display: inline-block;
     padding: 0.75rem 2rem;
-    background: linear-gradient(135deg, rgba(0, 255, 65, 0.2), rgba(0, 217, 255, 0.2));
+    background: linear-gradient(135deg, rgba(255, 46, 46, 0.2), rgba(255, 214, 51, 0.2));
     color: var(--color-primary);
     text-decoration: none;
     border: 2px solid var(--color-primary);
@@ -226,9 +226,9 @@ nav {
 }
 
 .cta-button:hover {
-    background: linear-gradient(135deg, rgba(0, 255, 65, 0.4), rgba(0, 217, 255, 0.4));
+    background: linear-gradient(135deg, rgba(255, 46, 46, 0.4), rgba(255, 214, 51, 0.4));
     transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(0, 255, 65, 0.6), inset 0 0 30px rgba(0, 255, 65, 0.2);
+    box-shadow: 0 0 30px rgba(255, 46, 46, 0.6), inset 0 0 30px rgba(255, 46, 46, 0.2);
     color: var(--color-primary-hover);
 }
 
@@ -284,15 +284,34 @@ section h2::after {
     background: transparent;
     border: 2px solid var(--color-primary);
     position: relative;
-    transition: all 0.3s ease;
     clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-    
-    
+    /* 3D parallax setup: cards establish their own 3D context so children
+       (image + title) can be transformed independently. Tilt + lift are
+       driven by --tilt-x/--tilt-y/--lift CSS vars set in script.js. */
+    perspective: 900px;
+    transform-style: preserve-3d;
+    transform:
+        translateY(var(--lift, 0px))
+        rotateX(var(--tilt-x, 0deg))
+        rotateY(var(--tilt-y, 0deg));
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.45s ease;
+    will-change: transform;
+    z-index: 1;
 }
 
-.uxui-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 30px rgba(0, 255, 65, 0.4);
+.uxui-card.is-hover {
+    z-index: 2;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55),
+                0 0 40px rgba(255, 46, 46, 0.35);
+    transition: transform 0.08s linear, box-shadow 0.3s ease;
+}
+
+/* Keyboard focus mirrors hover styling so non-pointer users get the lift. */
+.uxui-card:focus-visible {
+    outline: 2px solid var(--color-primary-hover);
+    outline-offset: 4px;
+    box-shadow: 0 0 30px rgba(255, 46, 46, 0.5);
 }
 
 .uxui-card img {
@@ -301,10 +320,40 @@ section h2::after {
     object-fit: cover;
     display: block;
     cursor: pointer;
-    transition: filter 0.3s ease;
+    transform-origin: center center;
+    transform:
+        translate3d(var(--img-x, 0px), var(--img-y, 0px), 0)
+        scale(var(--img-scale, 1));
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.3s ease;
+    will-change: transform;
 }
 
-.uxui-card img:hover { filter: brightness(1.2); }
+.uxui-card.is-hover img {
+    filter: brightness(1.15) contrast(1.05);
+    transition: transform 0.08s linear, filter 0.3s ease;
+}
+
+/* Title sits slightly forward so it stays legible during tilt. */
+.uxui-card .uxui-card-title {
+    transform: translateZ(20px);
+}
+
+/* Accessibility: honor reduced-motion. Disable 3D + scale, keep a subtle
+   brightness/box-shadow as a non-motion affordance. */
+@media (prefers-reduced-motion: reduce) {
+    .uxui-card,
+    .uxui-card img {
+        transform: none !important;
+        transition: box-shadow 0.2s ease, filter 0.2s ease !important;
+    }
+    .uxui-card.is-hover {
+        box-shadow: 0 0 25px rgba(255, 46, 46, 0.35);
+    }
+    .uxui-card.is-hover img {
+        filter: brightness(1.15);
+    }
+}
 
 .uxui-card-title {
     padding: 1rem;
@@ -342,7 +391,7 @@ section h2::after {
 .modal-content img, .modal-content video {
     max-width: 100%; max-height: 85vh;
     border: 2px solid var(--color-primary);
-    box-shadow: 0 0 50px rgba(0, 255, 65, 0.2);
+    box-shadow: 0 0 50px rgba(255, 46, 46, 0.2);
 }
 
 .modal-close {
@@ -442,7 +491,7 @@ section h2::after {
 
 .audio-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+    box-shadow: 0 0 20px rgba(255, 214, 51, 0.3);
 }
 
 .audio-card h3 {
@@ -596,7 +645,7 @@ section h2::after {
 .contact-form input[type="submit"]:hover {
     background: var(--color-primary);
     color: #000;
-    box-shadow: 0 0 20px rgba(0,255,65,0.4);
+    box-shadow: 0 0 20px rgba(255,46,46,0.4);
     transform: translateY(-2px);
 }
 
@@ -627,7 +676,7 @@ section h2::after {
     display: none;
     font-size: 1.5rem;
     z-index: 999;
-    box-shadow: 0 0 20px rgba(0,255,65,0.4);
+    box-shadow: 0 0 20px rgba(255,46,46,0.4);
 }
 
 /* Footer */
@@ -1101,7 +1150,7 @@ footer {
         object-fit: cover;
         border-radius: 12px;
         border: 2px solid var(--color-primary);
-        box-shadow: 0 0 20px rgba(0,255,65,0.2);
+        box-shadow: 0 0 20px rgba(255,46,46,0.2);
      ">
 
 </div>
