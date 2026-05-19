@@ -13,8 +13,9 @@
 
     const MAX_TILT = 10;       // degrees
     const MAX_PARALLAX = 12;   // px image offset
-    const HOVER_SCALE = 1.08;  // image enlarge on hover
+    const HOVER_SCALE = 1.18;  // image enlarge on hover
     const HOVER_LIFT = -6;     // px card lift on hover
+    const HOVER_IMG_Z = 30;    // px image translateZ on hover (above title)
 
     const cards = document.querySelectorAll('.uxui-card');
 
@@ -62,6 +63,7 @@
             if (!prefersReducedMotion.matches) {
                 card.style.setProperty('--lift', HOVER_LIFT + 'px');
                 card.style.setProperty('--img-scale', HOVER_SCALE);
+                card.style.setProperty('--img-z', HOVER_IMG_Z + 'px');
             }
         };
 
@@ -87,6 +89,7 @@
             card.style.removeProperty('--img-y');
             card.style.removeProperty('--lift');
             card.style.removeProperty('--img-scale');
+            card.style.removeProperty('--img-z');
         };
 
         card.addEventListener('pointerenter', onPointerEnter);
