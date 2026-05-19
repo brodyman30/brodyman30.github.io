@@ -11,6 +11,15 @@
         '(prefers-reduced-motion: reduce)'
     );
 
+    // Skip the 3D tilt/parallax/hover-expand pipeline on touch and coarse-pointer
+    // devices. Mirrors the CSS @media (hover: none), (pointer: coarse) gate so
+    // mobile taps go straight to the image's modal click handler — no jittery
+    // tilt, no stuck transforms, no flicker from the absolute-position image
+    // swap. Desktop hover behavior is unchanged.
+    const isCoarsePointer = window.matchMedia(
+        '(hover: none), (pointer: coarse)'
+    ).matches;
+
     const MAX_TILT = 10;       // degrees
     const MAX_PARALLAX = 12;   // px image offset
     const HOVER_SCALE = 1.18;  // image enlarge on hover
@@ -38,6 +47,10 @@
                 img.click();
             }
         });
+
+        // On coarse-pointer devices, stop here: keep keyboard + a11y wiring,
+        // skip the tilt/parallax/hover-expand pointer pipeline.
+        if (isCoarsePointer) return;
 
         let rafId = null;
         let pendingEvent = null;

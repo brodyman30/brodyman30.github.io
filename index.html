@@ -381,6 +381,82 @@ section h2::after {
     }
 }
 
+/* Mobile / touch / coarse-pointer: disable the 3D tilt + parallax + hover
+   image-fills-frame behavior. On these devices there's no real hover, the
+   tilt feels jittery, and the absolute-image swap caused stuck/glitched
+   states after taps. Cards stay flat, the title plate stays visible, and
+   taps go straight to the image's modal click handler. The mobile dynamic
+   feel is provided by the scroll-driven background drift below. */
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
+    .uxui-card {
+        perspective: none;
+        transform-style: flat;
+        transform: none;
+        transition: box-shadow 0.3s ease;
+        will-change: auto;
+    }
+    .uxui-card img {
+        transform: none;
+        transition: filter 0.3s ease;
+        will-change: auto;
+    }
+    .uxui-card.is-hover,
+    .uxui-card:focus-visible {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5),
+                    0 0 20px rgba(255, 46, 46, 0.3);
+    }
+    /* Cancel the hover image-expands-over-title rule so the card geometry
+       never changes on tap — prevents the cursor-outside-hitbox flicker
+       loop reported on phones. */
+    .uxui-card.is-hover img,
+    .uxui-card:focus-visible img {
+        position: relative;
+        inset: auto;
+        height: 300px;
+        filter: brightness(1.08);
+    }
+    .uxui-card.is-hover .uxui-card-title,
+    .uxui-card:focus-visible .uxui-card-title {
+        opacity: 1;
+        visibility: visible;
+    }
+    .uxui-card .uxui-card-title {
+        transform: none;
+    }
+}
+
+/* Mobile dynamic effect: a slow, subtle drift of glow blobs behind the page
+   content via a fixed-position pseudo-element. Replaces the lost 3D tilt
+   with motion that doesn't depend on hover. Desktop keeps its existing
+   static background. Disabled entirely under prefers-reduced-motion. */
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
+    body::before {
+        content: "";
+        position: fixed;
+        inset: -10vh -10vw;
+        pointer-events: none;
+        z-index: -1;
+        background:
+            radial-gradient(circle at 20% 30%, rgba(255, 46, 46, 0.18) 0%, transparent 45%),
+            radial-gradient(circle at 80% 70%, rgba(255, 179, 0, 0.16) 0%, transparent 45%),
+            radial-gradient(circle at 50% 90%, rgba(255, 214, 51, 0.12) 0%, transparent 50%);
+        animation: bgDrift 22s ease-in-out infinite alternate;
+        will-change: transform;
+    }
+}
+
+@keyframes bgDrift {
+    0%   { transform: translate3d(-4%, -3%, 0) scale(1.05); }
+    50%  { transform: translate3d( 3%,  2%, 0) scale(1.08); }
+    100% { transform: translate3d(-2%,  4%, 0) scale(1.05); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body::before {
+        animation: none !important;
+    }
+}
+
 .uxui-card-title {
     padding: 1rem;
     text-align: center;
@@ -1318,6 +1394,8 @@ footer {
                     <li>UI/UX Design</li>
                     <li>Visual Hierarchy</li>
                     <li>Color Theory</li>
+                    <li>Social Media Graphic Design</li>
+                    <li>Logo Design</li>
                                       
                 </ul>
             </div>
