@@ -59,6 +59,14 @@
         };
 
         const onPointerEnter = () => {
+            // Freeze the card's current height before swapping the image to
+            // position:absolute. Without this, the image leaves normal flow,
+            // the (still-visible-box) title is the only flow child, and the
+            // card collapses — pulling the cursor outside the hitbox and
+            // causing pointerenter/leave to fire repeatedly (flicker). The
+            // collapse is most visible on a lone row item in an auto-fit grid
+            // because the row's stretched width amplifies the geometry change.
+            card.style.minHeight = card.offsetHeight + 'px';
             card.classList.add('is-hover');
             if (!prefersReducedMotion.matches) {
                 card.style.setProperty('--lift', HOVER_LIFT + 'px');
@@ -77,6 +85,7 @@
 
         const onPointerLeave = () => {
             card.classList.remove('is-hover');
+            card.style.removeProperty('min-height');
             if (rafId !== null) {
                 cancelAnimationFrame(rafId);
                 rafId = null;
@@ -97,6 +106,15 @@
         card.addEventListener('pointerleave', onPointerLeave);
         // Cancel covers the case where a touch is interrupted mid-gesture.
         card.addEventListener('pointercancel', onPointerLeave);
+
+        // Keyboard focus triggers the same image-becomes-absolute CSS, so the
+        // card would collapse for focus users too. Freeze height on focus.
+        card.addEventListener('focus', () => {
+            card.style.minHeight = card.offsetHeight + 'px';
+        });
+        card.addEventListener('blur', () => {
+            card.style.removeProperty('min-height');
+        });
     });
 })();
 
