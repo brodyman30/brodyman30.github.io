@@ -345,6 +345,16 @@ section h2::after {
     position: relative;
     z-index: 2;
     transform: translateZ(20px);
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+/* On hover/focus, fully hide the title plate so the enlarged image is
+   unobstructed. visibility:hidden removes it from the accessibility tree
+   while it's not visible; idle state restores both. */
+.uxui-card.is-hover .uxui-card-title,
+.uxui-card:focus-visible .uxui-card-title {
+    opacity: 0;
+    visibility: hidden;
 }
 
 /* Accessibility: honor reduced-motion. Disable 3D + scale, keep a subtle
@@ -1198,6 +1208,9 @@ footer {
                     <li>Web APIs</li>
                     <li>GitHub</li>
                     <li>AI Assisted coding</li>
+                    <li>Wix Development</li>
+                    <li>Mobile App Development</li>
+                    <li>App Store Management</li>
                 </ul>
             </div>
             <div class="skill-category">
@@ -1229,6 +1242,7 @@ footer {
                     <li>Animation</li>
                     <li>Long Form Video Editing</li>
                     <li>Short Form Video Editing</li>
+                    <li>Trained on Zetta Broadcast Systems</li>
                 </ul>
             </div>
         </div>
