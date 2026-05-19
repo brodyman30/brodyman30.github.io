@@ -152,6 +152,31 @@ document.querySelectorAll('.video-player').forEach(player => {
     const progress = player.querySelector('.progress');
     const container = player.querySelector('.progress-container');
 
+    // Draggable scrubber. A range input is layered over the existing
+    // .progress fill so the visual style is preserved while the input
+    // provides native click/drag seeking, keyboard support (arrows/home/end),
+    // and built-in aria semantics.
+    const scrubber = document.createElement('input');
+    scrubber.type = 'range';
+    scrubber.min = '0';
+    scrubber.max = '1000';
+    scrubber.step = '1';
+    scrubber.value = '0';
+    scrubber.className = 'video-scrubber';
+    scrubber.setAttribute('aria-label', 'Seek video');
+    scrubber.setAttribute('aria-valuetext', '0:00');
+    container.appendChild(scrubber);
+
+    const formatTime = secs => {
+        if (!isFinite(secs) || secs < 0) secs = 0;
+        const m = Math.floor(secs / 60);
+        const s = Math.floor(secs % 60);
+        return m + ':' + String(s).padStart(2, '0');
+    };
+
+    let isScrubbing = false;
+    let wasPlayingBeforeScrub = false;
+
     // Play / pause button
     playBtn.addEventListener('click', () => {
         if (video.paused) {
@@ -169,18 +194,56 @@ document.querySelectorAll('.video-player').forEach(player => {
         muteBtn.textContent = video.muted ? '🔊' : '🔇';
     });
 
-    // Progress bar update
+    // Keep the visual fill and scrubber position in sync during playback,
+    // unless the user is actively dragging (avoid fighting their input).
     video.addEventListener('timeupdate', () => {
+        if (isScrubbing || !isFinite(video.duration) || video.duration === 0) return;
         const percent = (video.currentTime / video.duration) * 100;
         progress.style.width = percent + '%';
+        scrubber.value = String(Math.round((video.currentTime / video.duration) * 1000));
+        scrubber.setAttribute(
+            'aria-valuetext',
+            formatTime(video.currentTime) + ' of ' + formatTime(video.duration)
+        );
     });
 
-    // Seek on click
-    container.addEventListener('click', (e) => {
-        const width = container.clientWidth;
-        const clickX = e.offsetX;
-        video.currentTime = (clickX / width) * video.duration;
+    video.addEventListener('loadedmetadata', () => {
+        scrubber.setAttribute(
+            'aria-valuetext',
+            formatTime(video.currentTime) + ' of ' + formatTime(video.duration)
+        );
     });
+
+    // Drag/keyboard input on the scrubber: update fill + seek live.
+    scrubber.addEventListener('input', () => {
+        if (!isFinite(video.duration) || video.duration === 0) return;
+        const ratio = Number(scrubber.value) / 1000;
+        progress.style.width = (ratio * 100) + '%';
+        video.currentTime = ratio * video.duration;
+        scrubber.setAttribute(
+            'aria-valuetext',
+            formatTime(video.currentTime) + ' of ' + formatTime(video.duration)
+        );
+    });
+
+    // Pause while scrubbing so the playhead doesn't fight the drag, then
+    // resume if the video had been playing.
+    scrubber.addEventListener('pointerdown', () => {
+        isScrubbing = true;
+        wasPlayingBeforeScrub = !video.paused;
+        if (wasPlayingBeforeScrub) video.pause();
+    });
+    const endScrub = () => {
+        if (!isScrubbing) return;
+        isScrubbing = false;
+        if (wasPlayingBeforeScrub) {
+            video.play();
+            playBtn.textContent = '⏸';
+        }
+    };
+    scrubber.addEventListener('pointerup', endScrub);
+    scrubber.addEventListener('pointercancel', endScrub);
+    scrubber.addEventListener('blur', endScrub);
 
     // Click the video to toggle play/pause. Fullscreen-on-click was removed
     // because the deploy preview iframe forbids the Fullscreen API; users can
