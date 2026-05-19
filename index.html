@@ -331,9 +331,17 @@ section h2::after {
     will-change: transform;
 }
 
-/* On hover the image lifts above the title plate (higher z-index + translateZ)
-   and scales up a bit more than the default tilt-rest state. */
-.uxui-card.is-hover img {
+/* On hover the image lifts above the title plate (higher z-index + translateZ),
+   gets a brightness pop, and expands to fill the entire card frame — covering
+   the title-plate area too. The title element keeps its layout box (visibility
+   hidden, not display:none), so the card's natural height is preserved and the
+   image's inset:0 covers the same rectangle the card already occupied. */
+.uxui-card.is-hover img,
+.uxui-card:focus-visible img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     z-index: 3;
     filter: brightness(1.15) contrast(1.05);
     transition: transform 0.08s linear, filter 0.3s ease;
